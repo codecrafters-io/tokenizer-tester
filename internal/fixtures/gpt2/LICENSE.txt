@@ -1,0 +1,8 @@
+The vocab.json and merges.txt files in this directory are the GPT-2
+vocabulary published by OpenAI.
+
+Source: https://github.com/openai/gpt-2
+Mirror used here: https://huggingface.co/gpt2
+
+The GPT-2 model release is under the MIT license. These two files are
+redistributed so the tester can grade stage gpt2-match without a download.

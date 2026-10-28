@@ -1,0 +1,760 @@
+[
+  {
+    "name": "visible",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[108, 108], [111, 32]]",
+      "text.txt": "Hello world's 123!!"
+    },
+    "expected": [
+      72,
+      101,
+      256,
+      111,
+      32,
+      119,
+      111,
+      114,
+      108,
+      100,
+      39,
+      115,
+      32,
+      49,
+      50,
+      51,
+      33,
+      33
+    ]
+  },
+  {
+    "name": "hidden-0",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[68, 79], [256, 78], [257, 39], [258, 84]]",
+      "text.txt": "DON'T"
+    },
+    "expected": [
+      257,
+      39,
+      84
+    ]
+  },
+  {
+    "name": "hidden-1",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[224, 164], [256, 185], [257, 256], [258, 191], [259, 256], [260, 130], [261, 256], [262, 166]]",
+      "text.txt": "हिंदी"
+    },
+    "expected": [
+      257,
+      256,
+      191,
+      256,
+      130,
+      256,
+      166,
+      224,
+      165,
+      128
+    ]
+  },
+  {
+    "name": "hidden-2",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[102, 111], [256, 111], [257, 194], [258, 160], [259, 98], [260, 97], [261, 114]]",
+      "text.txt": "foo bar"
+    },
+    "expected": [
+      257,
+      194,
+      160,
+      98,
+      97,
+      114
+    ]
+  },
+  {
+    "name": "hidden-3",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[72, 101], [256, 108], [257, 108], [258, 111], [259, 44], [260, 32], [261, 119], [262, 111]]",
+      "text.txt": "Hello, world's 123"
+    },
+    "expected": [
+      259,
+      44,
+      32,
+      119,
+      111,
+      114,
+      108,
+      100,
+      39,
+      115,
+      32,
+      49,
+      50,
+      51
+    ]
+  },
+  {
+    "name": "hidden-4",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[32, 32], [97, 256], [257, 32], [258, 98]]",
+      "text.txt": "a   b"
+    },
+    "expected": [
+      97,
+      256,
+      32,
+      98
+    ]
+  },
+  {
+    "name": "hidden-5",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[32, 32], [256, 104], [257, 101], [258, 108], [259, 108], [260, 111]]",
+      "text.txt": "  hello"
+    },
+    "expected": [
+      32,
+      32,
+      104,
+      101,
+      108,
+      108,
+      111
+    ]
+  },
+  {
+    "name": "hidden-6",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[105, 116], [256, 39], [257, 115], [258, 32], [259, 97], [260, 32], [261, 116], [262, 101]]",
+      "text.txt": "it's a test"
+    },
+    "expected": [
+      256,
+      39,
+      115,
+      32,
+      97,
+      32,
+      116,
+      101,
+      115,
+      116
+    ]
+  },
+  {
+    "name": "hidden-7",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[101, 110], [256, 100], [257, 32], [258, 32]]",
+      "text.txt": "end  "
+    },
+    "expected": [
+      257,
+      32,
+      32
+    ]
+  },
+  {
+    "name": "hidden-8",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[10, 10]]",
+      "text.txt": "\n\n"
+    },
+    "expected": [
+      256
+    ]
+  },
+  {
+    "name": "hidden-9",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[73, 39], [256, 109]]",
+      "text.txt": "I'm"
+    },
+    "expected": [
+      73,
+      39,
+      109
+    ]
+  },
+  {
+    "name": "hidden-10",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[49, 50], [256, 51], [257, 52], [258, 53]]",
+      "text.txt": "12345"
+    },
+    "expected": [
+      259
+    ]
+  },
+  {
+    "name": "hidden-11",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[97, 9], [256, 98]]",
+      "text.txt": "a\tb"
+    },
+    "expected": [
+      97,
+      9,
+      98
+    ]
+  },
+  {
+    "name": "hidden-12",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[108, 111], [33, 33], [72, 101], [258, 108], [259, 256], [260, 44], [261, 32], [262, 119]]",
+      "text.txt": "Hello, world!!!? (안녕하세요!) lol123"
+    },
+    "expected": [
+      260,
+      44,
+      32,
+      119,
+      111,
+      114,
+      108,
+      100,
+      257,
+      33,
+      63,
+      32,
+      40,
+      236,
+      149,
+      136,
+      235,
+      133,
+      149,
+      237,
+      149,
+      152,
+      236,
+      132,
+      184,
+      236,
+      154,
+      148,
+      33,
+      41,
+      32,
+      256,
+      108,
+      49,
+      50,
+      51
+    ]
+  },
+  {
+    "name": "hidden-13",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[224, 174], [256, 164], [257, 256], [258, 174], [259, 256], [260, 191], [261, 256], [262, 180]]",
+      "text.txt": "தமிழ்"
+    },
+    "expected": [
+      259,
+      256,
+      191,
+      256,
+      180,
+      224,
+      175,
+      141
+    ]
+  },
+  {
+    "name": "hidden-14",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[32, 32], [102, 110], [257, 32], [258, 109], [259, 97], [260, 105], [261, 110], [262, 40]]",
+      "text.txt": "fn main() {\n    return;\n}\n"
+    },
+    "expected": [
+      257,
+      32,
+      109,
+      97,
+      105,
+      110,
+      40,
+      41,
+      32,
+      123,
+      10,
+      256,
+      32,
+      32,
+      114,
+      101,
+      116,
+      117,
+      114,
+      110,
+      59,
+      10,
+      125,
+      10
+    ]
+  },
+  {
+    "name": "hidden-15",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[240, 159], [256, 145], [257, 139]]",
+      "text.txt": "👋"
+    },
+    "expected": [
+      258
+    ]
+  },
+  {
+    "name": "hidden-16",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[104, 105], [256, 32], [257, 240], [258, 159], [259, 145], [260, 139]]",
+      "text.txt": "hi 👋"
+    },
+    "expected": [
+      256,
+      32,
+      240,
+      159,
+      145,
+      139
+    ]
+  },
+  {
+    "name": "hidden-17",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[100, 111], [256, 103], [32, 257], [257, 46], [259, 258], [260, 33], [261, 258], [262, 63]]",
+      "text.txt": "dog. dog! dog?"
+    },
+    "expected": [
+      257,
+      46,
+      258,
+      33,
+      258,
+      63
+    ]
+  },
+  {
+    "name": "hidden-18",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[32, 32], [256, 32]]",
+      "text.txt": "   "
+    },
+    "expected": [
+      257
+    ]
+  },
+  {
+    "name": "hidden-19",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[100, 111], [256, 110], [257, 39], [258, 116], [259, 32], [260, 68], [261, 79], [262, 78]]",
+      "text.txt": "don't DON'T"
+    },
+    "expected": [
+      257,
+      39,
+      116,
+      32,
+      68,
+      79,
+      78,
+      39,
+      84
+    ]
+  },
+  {
+    "name": "hidden-20",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[112, 114], [256, 105], [257, 99], [258, 101], [259, 32], [260, 105], [261, 115], [262, 32]]",
+      "text.txt": "price is $12.50 today"
+    },
+    "expected": [
+      259,
+      32,
+      105,
+      115,
+      32,
+      36,
+      49,
+      50,
+      46,
+      53,
+      48,
+      32,
+      116,
+      111,
+      100,
+      97,
+      121
+    ]
+  },
+  {
+    "name": "hidden-21",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[99, 97], [256, 102], [257, 195], [258, 169]]",
+      "text.txt": "café"
+    },
+    "expected": [
+      259
+    ]
+  },
+  {
+    "name": "hidden-22",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[110, 101], [108, 105], [257, 256], [258, 32], [259, 111], [260, 256], [261, 10], [262, 259]]",
+      "text.txt": "line one\nline two"
+    },
+    "expected": [
+      258,
+      32,
+      111,
+      256,
+      10,
+      258,
+      32,
+      116,
+      119,
+      111
+    ]
+  },
+  {
+    "name": "hidden-23",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[33, 33], [256, 63], [257, 63]]",
+      "text.txt": "!!??"
+    },
+    "expected": [
+      258
+    ]
+  },
+  {
+    "name": "hidden-24",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[32, 32], [256, 52], [257, 50]]",
+      "text.txt": "  42"
+    },
+    "expected": [
+      32,
+      32,
+      52,
+      50
+    ]
+  },
+  {
+    "name": "hidden-25",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[119, 111], [256, 114], [257, 108], [258, 100], [259, 39], [260, 115]]",
+      "text.txt": "world's"
+    },
+    "expected": [
+      259,
+      39,
+      115
+    ]
+  },
+  {
+    "name": "hidden-26",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[65, 204], [256, 129]]",
+      "text.txt": "Á"
+    },
+    "expected": [
+      65,
+      204,
+      129
+    ]
+  },
+  {
+    "name": "hidden-27",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[104, 101], [256, 108], [257, 108], [258, 111], [259, 32], [260, 32], [261, 119], [262, 111]]",
+      "text.txt": "hello  world"
+    },
+    "expected": [
+      259,
+      32,
+      32,
+      119,
+      111,
+      114,
+      108,
+      100
+    ]
+  },
+  {
+    "name": "hidden-28",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[104, 101], [256, 108], [257, 108], [258, 111]]",
+      "text.txt": ""
+    },
+    "expected": []
+  },
+  {
+    "name": "hidden-29",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[115, 112], [256, 97], [257, 99], [258, 101], [259, 115], [260, 194], [261, 160], [262, 97]]",
+      "text.txt": "spaces and more"
+    },
+    "expected": [
+      260,
+      194,
+      160,
+      97,
+      110,
+      100,
+      32,
+      109,
+      111,
+      114,
+      101
+    ]
+  }
+]

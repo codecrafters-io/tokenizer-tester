@@ -1,0 +1,388 @@
+[
+  {
+    "name": "visible-wave",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "hi 👋"
+    },
+    "expected": [
+      104,
+      105,
+      32,
+      240,
+      159,
+      145,
+      139
+    ]
+  },
+  {
+    "name": "devanagari-na",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "न"
+    },
+    "expected": [
+      224,
+      164,
+      168
+    ]
+  },
+  {
+    "name": "empty",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": ""
+    },
+    "expected": []
+  },
+  {
+    "name": "hello",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "hello"
+    },
+    "expected": [
+      104,
+      101,
+      108,
+      108,
+      111
+    ]
+  },
+  {
+    "name": "newline",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "a\nb"
+    },
+    "expected": [
+      97,
+      10,
+      98
+    ]
+  },
+  {
+    "name": "tab",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "a\tb"
+    },
+    "expected": [
+      97,
+      9,
+      98
+    ]
+  },
+  {
+    "name": "emoji-only",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "🙂"
+    },
+    "expected": [
+      240,
+      159,
+      153,
+      130
+    ]
+  },
+  {
+    "name": "hindi-word",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "हिंदी"
+    },
+    "expected": [
+      224,
+      164,
+      185,
+      224,
+      164,
+      191,
+      224,
+      164,
+      130,
+      224,
+      164,
+      166,
+      224,
+      165,
+      128
+    ]
+  },
+  {
+    "name": "tamil-word",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "தமிழ்"
+    },
+    "expected": [
+      224,
+      174,
+      164,
+      224,
+      174,
+      174,
+      224,
+      174,
+      191,
+      224,
+      174,
+      180,
+      224,
+      175,
+      141
+    ]
+  },
+  {
+    "name": "mixed",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "aनb"
+    },
+    "expected": [
+      97,
+      224,
+      164,
+      168,
+      98
+    ]
+  },
+  {
+    "name": "spaces",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "  x"
+    },
+    "expected": [
+      32,
+      32,
+      120
+    ]
+  },
+  {
+    "name": "nbsp",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "foo bar"
+    },
+    "expected": [
+      102,
+      111,
+      111,
+      194,
+      160,
+      98,
+      97,
+      114
+    ]
+  },
+  {
+    "name": "code",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "fn main() {}"
+    },
+    "expected": [
+      102,
+      110,
+      32,
+      109,
+      97,
+      105,
+      110,
+      40,
+      41,
+      32,
+      123,
+      125
+    ]
+  },
+  {
+    "name": "punctuation",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "Hello, world!"
+    },
+    "expected": [
+      72,
+      101,
+      108,
+      108,
+      111,
+      44,
+      32,
+      119,
+      111,
+      114,
+      108,
+      100,
+      33
+    ]
+  },
+  {
+    "name": "digits",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "12345"
+    },
+    "expected": [
+      49,
+      50,
+      51,
+      52,
+      53
+    ]
+  },
+  {
+    "name": "quotes",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "it's"
+    },
+    "expected": [
+      105,
+      116,
+      39,
+      115
+    ]
+  },
+  {
+    "name": "caps",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "DON'T"
+    },
+    "expected": [
+      68,
+      79,
+      78,
+      39,
+      84
+    ]
+  },
+  {
+    "name": "null-char",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "a\u0000b"
+    },
+    "expected": [
+      97,
+      0,
+      98
+    ]
+  },
+  {
+    "name": "cjk",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "你好"
+    },
+    "expected": [
+      228,
+      189,
+      160,
+      229,
+      165,
+      189
+    ]
+  },
+  {
+    "name": "skin-tone",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "👋🏻"
+    },
+    "expected": [
+      240,
+      159,
+      145,
+      139,
+      240,
+      159,
+      143,
+      187
+    ]
+  },
+  {
+    "name": "multiline",
+    "args": [
+      "bytes",
+      "text.txt"
+    ],
+    "files": {
+      "text.txt": "one\ntwo\n"
+    },
+    "expected": [
+      111,
+      110,
+      101,
+      10,
+      116,
+      119,
+      111,
+      10
+    ]
+  }
+]

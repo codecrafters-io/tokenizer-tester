@@ -1,0 +1,143 @@
+# Unallocated slugs, in order, for later extension stages:
+# js8 aj3 pq3 uu0 vg3 gw6 eo5 dg4 zq7 so2 pw5 vy2
+
+slug: "tokenizer"
+name: "Build your own Tokenizer"
+short_name: "Tokenizer"
+release_status: "alpha"
+
+description_md: |-
+  A tokenizer turns text into the integers a language model reads. In this challenge, you'll build a byte-pair encoding tokenizer that's capable of training a vocabulary, encoding text, and decoding token IDs.
+
+  Along the way, you'll learn about byte-level BPE, pretokenization, and GPT-2's encoding.
+
+short_description_md: |-
+  Learn about byte-level BPE, pretokenization, and GPT-2
+
+completion_percentage: 5
+
+languages:
+  - slug: "python"
+    release_status: "alpha"
+  - slug: "rust"
+    release_status: "alpha"
+  - slug: "go"
+    release_status: "alpha"
+  - slug: "cpp"
+    release_status: "alpha"
+  - slug: "typescript"
+    release_status: "alpha"
+  - slug: "java"
+    release_status: "alpha"
+
+marketing:
+  difficulty: medium
+  sample_extension_idea_title: "Special tokens"
+  sample_extension_idea_description: "A tokenizer that can keep reserved tokens whole."
+  frequently_asked_questions:
+    - question_markdown: "What exactly will I build?"
+      answer_markdown: |-
+        You'll build a byte-pair encoding tokenizer. By the end of the base stages it can train a vocabulary, encode text to token IDs, and decode those IDs back to text, including text that matches GPT-2.
+
+        Your program will already agree with GPT-2 on real text, so the same IDs can be fed to a language model.
+
+        Later extensions add:
+        * Reserved tokens such as `<|endoftext|>`
+        * Token counts across languages
+        * A faster encoder
+        * A vocabulary trained on Hindi
+
+        At the end, you'll have a GitHub repo to show off.
+    - question_markdown: "What exactly will I learn?"
+      answer_markdown: |-
+        In the first 8 stages, you'll learn:
+        * How text becomes UTF-8 bytes, and why those 256 values are the starting vocabulary
+        * How byte-pair encoding chooses a merge, including ties and overlapping pairs
+        * How encoding applies learned merges in rank order
+        * How decoding turns token IDs back into text, including broken UTF-8
+        * How GPT-2 splits text before merging, and how its vocabulary files name bytes
+
+        As your code gets complex, you'll be forced to structure and refactor it, to avoid regressions and to make adding new features easier.
+    - question_markdown: "Why should I build such a project?"
+      answer_markdown: |-
+        Every language model reads integers, not text. Building the tokenizer shows you why the same sentence can be cheap in English and expensive in Hindi, and why a space is part of the next word.
+
+        You'll finish with a program whose token IDs match a real GPT-2 model. That is the piece you need before you can run the model yourself.
+    - question_markdown: "What are the prerequisites for this challenge?"
+      answer_markdown: |-
+        You should be comfortable writing code in Python, Rust, Go, C++, TypeScript, or Java, and using Git. No machine learning background is required.
+
+        Most learners pick up the Unicode details as they go.
+
+        What matters most is curiosity and persistence. You'll develop intuition by exploring, debugging, and discovering solutions yourself.
+
+        While we will make it extremely simple to get started, don't expect this to be a follow-along tutorial.
+  testimonials: []
+
+extensions:
+  - slug: "special-tokens"
+    name: "Special tokens"
+    description_markdown: |-
+      In this challenge extension you'll keep reserved tokens such as [<|endoftext|>](https://github.com/openai/tiktoken) from being split during encoding.
+
+      Along the way you'll learn about special-token matching, vocabulary reservations, and more.
+  - slug: "token-tax"
+    name: "Token tax"
+    description_markdown: |-
+      In this challenge extension you'll count tokens for the same text in English, Hindi, Tamil, and code.
+
+      Along the way you'll learn about token budgets, script differences, and more.
+  - slug: "fast-encoding"
+    name: "Fast encoding"
+    description_markdown: |-
+      In this challenge extension you'll encode a large file by merging pairs with a priority queue.
+
+      Along the way you'll learn about merge ranks, incremental updates, and more.
+  - slug: "hindi-vocab"
+    name: "Train for one language"
+    description_markdown: |-
+      In this challenge extension you'll train a vocabulary on Hindi text and encode a held-out sample with it.
+
+      Along the way you'll learn about corpus training, token counts, and more.
+
+stages:
+  - slug: "kx8"
+    name: "UTF-8 bytes"
+    difficulty: very_easy
+    marketing_md: |-
+      In this stage, you'll implement the `bytes` command.
+  - slug: "gk8"
+    name: "Most frequent pair"
+    difficulty: easy
+    marketing_md: |-
+      In this stage, you'll find the adjacent pair of token ids that shows up most often.
+  - slug: "fk3"
+    name: "Apply a merge"
+    difficulty: easy
+    marketing_md: |-
+      In this stage, you'll replace one pair with a new token id, scanning from left to right.
+  - slug: "ur9"
+    name: "Train BPE"
+    difficulty: medium
+    marketing_md: |-
+      In this stage, you'll repeat that replacement and learn an ordered list of merges from a corpus.
+  - slug: "kz6"
+    name: "Encode"
+    difficulty: medium
+    marketing_md: |-
+      In this stage, you'll encode new text by applying the earliest merge that still appears.
+  - slug: "vg5"
+    name: "Decode"
+    difficulty: medium
+    marketing_md: |-
+      In this stage, you'll turn token ids back into text, including bytes that are not valid UTF-8.
+  - slug: "wl7"
+    name: "Pretokenize"
+    difficulty: medium
+    marketing_md: |-
+      In this stage, you'll split text the way GPT-2 does before any merge is applied.
+  - slug: "as1"
+    name: "Match GPT-2"
+    difficulty: hard
+    marketing_md: |-
+      In this stage, you'll load GPT-2's vocabulary and produce the same token ids as tiktoken.

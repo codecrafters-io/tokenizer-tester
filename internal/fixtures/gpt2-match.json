@@ -1,0 +1,1027 @@
+[
+  {
+    "name": "visible-hello-world",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "Hello world"
+    },
+    "expected": [
+      15496,
+      995
+    ]
+  },
+  {
+    "name": "visible-leading-space",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": " Hello world"
+    },
+    "expected": [
+      18435,
+      995
+    ]
+  },
+  {
+    "name": "empty",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": ""
+    },
+    "expected": []
+  },
+  {
+    "name": "bang",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "!"
+    },
+    "expected": [
+      0
+    ]
+  },
+  {
+    "name": "letter-a",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "a"
+    },
+    "expected": [
+      64
+    ]
+  },
+  {
+    "name": "space",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": " "
+    },
+    "expected": [
+      220
+    ]
+  },
+  {
+    "name": "newline",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "\n"
+    },
+    "expected": [
+      198
+    ]
+  },
+  {
+    "name": "dont",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "don't"
+    },
+    "expected": [
+      9099,
+      470
+    ]
+  },
+  {
+    "name": "dont-caps",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "DON'T"
+    },
+    "expected": [
+      41173,
+      6,
+      51
+    ]
+  },
+  {
+    "name": "hindi",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "हिंदी"
+    },
+    "expected": [
+      11976,
+      117,
+      11976,
+      123,
+      11976,
+      224,
+      11976,
+      99,
+      24231,
+      222
+    ]
+  },
+  {
+    "name": "hindi-sentence",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "नमस्ते दुनिया"
+    },
+    "expected": [
+      11976,
+      101,
+      11976,
+      106,
+      11976,
+      116,
+      24231,
+      235,
+      11976,
+      97,
+      24231,
+      229,
+      28225,
+      99,
+      24231,
+      223,
+      11976,
+      101,
+      11976,
+      123,
+      11976,
+      107,
+      48077
+    ]
+  },
+  {
+    "name": "tamil",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "தமிழ்"
+    },
+    "expected": [
+      156,
+      106,
+      97,
+      156,
+      106,
+      106,
+      156,
+      106,
+      123,
+      156,
+      106,
+      112,
+      156,
+      107,
+      235
+    ]
+  },
+  {
+    "name": "tamil-sentence",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "வணக்கம் உலகம்"
+    },
+    "expected": [
+      156,
+      106,
+      113,
+      156,
+      106,
+      96,
+      156,
+      106,
+      243,
+      156,
+      107,
+      235,
+      156,
+      106,
+      243,
+      156,
+      106,
+      106,
+      156,
+      107,
+      235,
+      220,
+      156,
+      106,
+      231,
+      156,
+      106,
+      110,
+      156,
+      106,
+      243,
+      156,
+      106,
+      106,
+      156,
+      107,
+      235
+    ]
+  },
+  {
+    "name": "emoji",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "👋"
+    },
+    "expected": [
+      41840,
+      233
+    ]
+  },
+  {
+    "name": "hi-emoji",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "hi 👋"
+    },
+    "expected": [
+      5303,
+      50169,
+      233
+    ]
+  },
+  {
+    "name": "smile",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "🙂"
+    },
+    "expected": [
+      8582,
+      25081
+    ]
+  },
+  {
+    "name": "code",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "fn main() {\n    return;\n}\n"
+    },
+    "expected": [
+      22184,
+      1388,
+      3419,
+      1391,
+      198,
+      220,
+      220,
+      220,
+      1441,
+      26,
+      198,
+      92,
+      198
+    ]
+  },
+  {
+    "name": "python",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "def add(a, b):\n    return a + b\n"
+    },
+    "expected": [
+      4299,
+      751,
+      7,
+      64,
+      11,
+      275,
+      2599,
+      198,
+      220,
+      220,
+      220,
+      1441,
+      257,
+      1343,
+      275,
+      198
+    ]
+  },
+  {
+    "name": "nbsp",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "foo bar"
+    },
+    "expected": [
+      21943,
+      1849,
+      5657
+    ]
+  },
+  {
+    "name": "repeated-spaces",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "hello  world"
+    },
+    "expected": [
+      31373,
+      220,
+      995
+    ]
+  },
+  {
+    "name": "leading-spaces",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "  hello"
+    },
+    "expected": [
+      220,
+      23748
+    ]
+  },
+  {
+    "name": "trailing-spaces",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "end  "
+    },
+    "expected": [
+      437,
+      220,
+      220
+    ]
+  },
+  {
+    "name": "newlines",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "\n\n"
+    },
+    "expected": [
+      628
+    ]
+  },
+  {
+    "name": "tabs",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "a\tb"
+    },
+    "expected": [
+      64,
+      197,
+      65
+    ]
+  },
+  {
+    "name": "punctuation",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "Hello, world's 123!!"
+    },
+    "expected": [
+      15496,
+      11,
+      995,
+      338,
+      17031,
+      3228
+    ]
+  },
+  {
+    "name": "cjk",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "你好世界"
+    },
+    "expected": [
+      19526,
+      254,
+      25001,
+      121,
+      10310,
+      244,
+      45911,
+      234
+    ]
+  },
+  {
+    "name": "korean",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "안녕하세요"
+    },
+    "expected": [
+      168,
+      243,
+      230,
+      167,
+      227,
+      243,
+      47991,
+      246,
+      168,
+      226,
+      116,
+      168,
+      248,
+      242
+    ]
+  },
+  {
+    "name": "digits",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "12345"
+    },
+    "expected": [
+      10163,
+      2231
+    ]
+  },
+  {
+    "name": "money",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "price is $12.50 today"
+    },
+    "expected": [
+      20888,
+      318,
+      720,
+      1065,
+      13,
+      1120,
+      1909
+    ]
+  },
+  {
+    "name": "contraction",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "it's a test"
+    },
+    "expected": [
+      270,
+      338,
+      257,
+      1332
+    ]
+  },
+  {
+    "name": "im",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "I'm"
+    },
+    "expected": [
+      40,
+      1101
+    ]
+  },
+  {
+    "name": "question",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "Hello, world!!!? (안녕하세요!) lol123"
+    },
+    "expected": [
+      15496,
+      11,
+      995,
+      10185,
+      30,
+      357,
+      168,
+      243,
+      230,
+      167,
+      227,
+      243,
+      47991,
+      246,
+      168,
+      226,
+      116,
+      168,
+      248,
+      242,
+      8133,
+      19462,
+      10163
+    ]
+  },
+  {
+    "name": "dog",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "dog. dog! dog?"
+    },
+    "expected": [
+      9703,
+      13,
+      3290,
+      0,
+      3290,
+      30
+    ]
+  },
+  {
+    "name": "only-spaces",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "   "
+    },
+    "expected": [
+      220,
+      220,
+      220
+    ]
+  },
+  {
+    "name": "combining",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "Á"
+    },
+    "expected": [
+      32,
+      136,
+      223
+    ]
+  },
+  {
+    "name": "devanagari-letter",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "न"
+    },
+    "expected": [
+      11976,
+      101
+    ]
+  },
+  {
+    "name": "quote",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "\"hello\""
+    },
+    "expected": [
+      1,
+      31373,
+      1
+    ]
+  },
+  {
+    "name": "slash",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "a/b/c"
+    },
+    "expected": [
+      64,
+      14,
+      65,
+      14,
+      66
+    ]
+  },
+  {
+    "name": "urlish",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "https://example.com/a"
+    },
+    "expected": [
+      5450,
+      1378,
+      20688,
+      13,
+      785,
+      14,
+      64
+    ]
+  },
+  {
+    "name": "mixed-emoji",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "ok 👍🏻"
+    },
+    "expected": [
+      482,
+      50169,
+      235,
+      8582,
+      237,
+      119
+    ]
+  },
+  {
+    "name": "indent",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "\tif x:\n\t\treturn\n"
+    },
+    "expected": [
+      197,
+      361,
+      2124,
+      25,
+      198,
+      197,
+      197,
+      7783,
+      198
+    ]
+  },
+  {
+    "name": "blank-line",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "one\n\ntwo"
+    },
+    "expected": [
+      505,
+      198,
+      198,
+      11545
+    ]
+  },
+  {
+    "name": "comma",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "red, green, blue"
+    },
+    "expected": [
+      445,
+      11,
+      4077,
+      11,
+      4171
+    ]
+  },
+  {
+    "name": "apostrophe-word",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "world's"
+    },
+    "expected": [
+      6894,
+      338
+    ]
+  },
+  {
+    "name": "caps-hello",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "HELLO"
+    },
+    "expected": [
+      13909,
+      3069,
+      46
+    ]
+  },
+  {
+    "name": "lower-hello",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "hello"
+    },
+    "expected": [
+      31373
+    ]
+  },
+  {
+    "name": "number-word",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "room 101"
+    },
+    "expected": [
+      3823,
+      8949
+    ]
+  },
+  {
+    "name": "ellipsis",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "wait..."
+    },
+    "expected": [
+      17077,
+      986
+    ]
+  },
+  {
+    "name": "parens",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "(yes)"
+    },
+    "expected": [
+      7,
+      8505,
+      8
+    ]
+  },
+  {
+    "name": "skin-and-zwj",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "👨‍💻"
+    },
+    "expected": [
+      41840,
+      101,
+      447,
+      235,
+      8582,
+      240,
+      119
+    ]
+  },
+  {
+    "name": "equals",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "a == b"
+    },
+    "expected": [
+      64,
+      6624,
+      275
+    ]
+  },
+  {
+    "name": "hindi-code",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "मान = 1"
+    },
+    "expected": [
+      11976,
+      106,
+      48077,
+      11976,
+      101,
+      796,
+      352
+    ]
+  }
+]

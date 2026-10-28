@@ -1,0 +1,282 @@
+[
+  {
+    "name": "visible",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[[97, 97], [256, 97], [257, 98]]",
+      "ids.json": "[258, 100]"
+    },
+    "expected": "aaabd"
+  },
+  {
+    "name": "half-wave",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[240, 159]"
+    },
+    "expected": "�"
+  },
+  {
+    "name": "full-wave",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[240, 159, 145, 139]"
+    },
+    "expected": "👋"
+  },
+  {
+    "name": "round-trip",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[[97, 97], [256, 97], [257, 98]]",
+      "ids.json": "[258, 100, 258, 97, 99]"
+    },
+    "expected": "aaabdaaabac"
+  },
+  {
+    "name": "single-byte",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[104]"
+    },
+    "expected": "h"
+  },
+  {
+    "name": "invalid-byte",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[255]"
+    },
+    "expected": "�"
+  },
+  {
+    "name": "two-invalid",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[255, 255]"
+    },
+    "expected": "��"
+  },
+  {
+    "name": "emoji-split-kept",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[240, 159, 145, 139]"
+    },
+    "expected": "👋"
+  },
+  {
+    "name": "empty",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[]"
+    },
+    "expected": ""
+  },
+  {
+    "name": "training-tokens",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[[97, 97], [256, 97], [257, 98]]",
+      "ids.json": "[258, 100, 258, 97, 99]"
+    },
+    "expected": "aaabdaaabac"
+  },
+  {
+    "name": "mixed-0",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[0, 240, 159, 1]"
+    },
+    "expected": "\u0000�\u0001"
+  },
+  {
+    "name": "mixed-1",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[1, 240, 159, 2]"
+    },
+    "expected": "\u0001�\u0002"
+  },
+  {
+    "name": "mixed-2",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[2, 240, 159, 3]"
+    },
+    "expected": "\u0002�\u0003"
+  },
+  {
+    "name": "mixed-3",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[3, 240, 159, 4]"
+    },
+    "expected": "\u0003�\u0004"
+  },
+  {
+    "name": "mixed-4",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[4, 240, 159, 5]"
+    },
+    "expected": "\u0004�\u0005"
+  },
+  {
+    "name": "mixed-5",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[5, 240, 159, 6]"
+    },
+    "expected": "\u0005�\u0006"
+  },
+  {
+    "name": "mixed-6",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[6, 240, 159, 7]"
+    },
+    "expected": "\u0006�\u0007"
+  },
+  {
+    "name": "mixed-7",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[7, 240, 159, 8]"
+    },
+    "expected": "\u0007�\b"
+  },
+  {
+    "name": "mixed-8",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[8, 240, 159, 9]"
+    },
+    "expected": "\b�\t"
+  },
+  {
+    "name": "mixed-9",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[9, 240, 159, 10]"
+    },
+    "expected": "\t�\n"
+  }
+]
