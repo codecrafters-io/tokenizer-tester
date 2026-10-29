@@ -62,10 +62,11 @@ def stage_bytes():
 def stage_top_pair():
     corpus = list("aaabdaaabac".encode())
     sequences = [
-        ("visible-aaabdaaabac", corpus),
-        ("tie-not-lowest-id", [8, 9, 1, 2]),
-        ("aaa-counts-twice", [97, 97, 97]),
-        ("single-pair", [4, 5]),
+        ("visible", [1, 2, 3, 1, 2]),
+        ("tie-first-pair-wins", [8, 9, 1, 2]),
+        # (5, 5) and (6, 7) both appear twice only when overlapping pairs count.
+        ("overlapping-pairs-count", [5, 5, 5, 6, 7, 6, 7]),
+        ("aaabdaaabac", corpus),
     ]
     cases = []
     for name, ids in sequences:
@@ -76,9 +77,10 @@ def stage_top_pair():
 def stage_merge():
     corpus = list("aaabdaaabac".encode())
     specs = [
-        ("visible", corpus, 97, 97),
+        ("visible", [1, 2, 3, 1, 2], 1, 2),
         ("aaa", [97, 97, 97], 97, 97),
         ("missing-pair", [1, 2, 3], 9, 9),
+        ("aaabdaaabac", corpus, 97, 97),
     ]
     cases = []
     for name, ids, left, right in specs:
@@ -184,16 +186,16 @@ def stage_pretokenize():
         )
     ]
     samples = [
-        "DON'T",
-        "हिंदी",
-        "foo\u00a0bar",
+        ("uppercase-contraction", "DON'T"),
+        ("hindi-combining-marks", "हिंदी"),
+        ("non-breaking-space", "foo\u00a0bar"),
     ]
-    for index, text in enumerate(samples):
+    for name, text in samples:
         # Train without the regex so some merges sit on chunk boundaries.
         merges = reference.train(text if text else "hello", 8)
         cases.append(
             case(
-                f"hidden-{index}",
+                name,
                 ["encode", "text.txt", "--merges", "merges.json", "--pretokenize", "gpt2"],
                 merges_file(merges, **text_file("text.txt", text)),
                 reference.encode_text(text, merges, pretokenize=True),

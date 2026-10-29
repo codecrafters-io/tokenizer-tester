@@ -10,6 +10,8 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -42,7 +44,17 @@ func runFixture(harness *test_case_harness.TestCaseHarness, slug string) error {
 		}
 		defer os.RemoveAll(workDir)
 
-		for name, contents := range testCase.Files {
+		names := make([]string, 0, len(testCase.Files))
+		for name := range testCase.Files {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		sort.SliceStable(names, func(i, j int) bool {
+			return argPosition(testCase.Args, names[i]) < argPosition(testCase.Args, names[j])
+		})
+
+		for _, name := range names {
+			contents := testCase.Files[name]
 			path := filepath.Join(workDir, name)
 			if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 				return err
@@ -50,12 +62,14 @@ func runFixture(harness *test_case_harness.TestCaseHarness, slug string) error {
 			if err := os.WriteFile(path, []byte(contents), 0o644); err != nil {
 				return err
 			}
+			logger.Infof("Wrote %s: %s", name, describeFile(name, contents))
 		}
 
 		if contains(testCase.Args, "--vocab") {
 			if err := materializeGPT2(workDir); err != nil {
 				return err
 			}
+			logger.Infof("Wrote GPT-2's vocabulary to gpt2/vocab.json and gpt2/merges.txt")
 		}
 
 		logger.Infof("$ ./%s %s", filepath.Base(harness.Executable.Path), strings.Join(testCase.Args, " "))
@@ -123,7 +137,7 @@ func parseJSONValue(raw []byte) (any, error) {
 func normalize(value any) any {
 	switch typed := value.(type) {
 	case json.Number:
-		return typed.String()
+		return typed
 	case []any:
 		for i, item := range typed {
 			typed[i] = normalize(item)
@@ -144,6 +158,35 @@ func preview(value any) string {
 		return text[:240] + "..."
 	}
 	return text
+}
+
+// JSON files are shown as written. Text files are quoted so newlines and
+// empty files stay visible.
+func describeFile(name string, contents string) string {
+	const limit = 200
+	runes := []rune(contents)
+	truncated := len(runes) > limit
+	if truncated {
+		runes = runes[:limit]
+	}
+
+	shown := string(runes)
+	if !strings.HasSuffix(name, ".json") {
+		shown = strconv.Quote(shown)
+	}
+	if truncated {
+		shown += fmt.Sprintf(" ... (%d bytes total)", len(contents))
+	}
+	return shown
+}
+
+func argPosition(args []string, name string) int {
+	for i, arg := range args {
+		if arg == name {
+			return i
+		}
+	}
+	return len(args)
 }
 
 func contains(args []string, needle string) bool {

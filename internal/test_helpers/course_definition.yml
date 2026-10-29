@@ -74,32 +74,6 @@ marketing:
         While we will make it extremely simple to get started, don't expect this to be a follow-along tutorial.
   testimonials: []
 
-extensions:
-  - slug: "special-tokens"
-    name: "Special tokens"
-    description_markdown: |-
-      In this challenge extension you'll keep reserved tokens such as [<|endoftext|>](https://github.com/openai/tiktoken) from being split during encoding.
-
-      Along the way you'll learn about special-token matching, vocabulary reservations, and more.
-  - slug: "token-tax"
-    name: "Token tax"
-    description_markdown: |-
-      In this challenge extension you'll count tokens for the same text in English, Hindi, Tamil, and code.
-
-      Along the way you'll learn about token budgets, script differences, and more.
-  - slug: "fast-encoding"
-    name: "Fast encoding"
-    description_markdown: |-
-      In this challenge extension you'll encode a large file by merging pairs with a priority queue.
-
-      Along the way you'll learn about merge ranks, incremental updates, and more.
-  - slug: "hindi-vocab"
-    name: "Train for one language"
-    description_markdown: |-
-      In this challenge extension you'll train a vocabulary on Hindi text and encode a held-out sample with it.
-
-      Along the way you'll learn about corpus training, token counts, and more.
-
 stages:
   - slug: "kx8"
     name: "UTF-8 bytes"

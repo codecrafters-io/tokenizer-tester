@@ -35,7 +35,7 @@
     ]
   },
   {
-    "name": "hidden-0",
+    "name": "uppercase-contraction",
     "args": [
       "encode",
       "text.txt",
@@ -55,7 +55,7 @@
     ]
   },
   {
-    "name": "hidden-1",
+    "name": "hindi-combining-marks",
     "args": [
       "encode",
       "text.txt",
@@ -82,7 +82,7 @@
     ]
   },
   {
-    "name": "hidden-2",
+    "name": "non-breaking-space",
     "args": [
       "encode",
       "text.txt",

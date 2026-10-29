@@ -1,20 +1,20 @@
 [
   {
-    "name": "visible-aaabdaaabac",
+    "name": "visible",
     "args": [
       "top-pair",
       "ids.json"
     ],
     "files": {
-      "ids.json": "[97, 97, 97, 98, 100, 97, 97, 97, 98, 97, 99]"
+      "ids.json": "[1, 2, 3, 1, 2]"
     },
     "expected": [
-      97,
-      97
+      1,
+      2
     ]
   },
   {
-    "name": "tie-not-lowest-id",
+    "name": "tie-first-pair-wins",
     "args": [
       "top-pair",
       "ids.json"
@@ -28,31 +28,31 @@
     ]
   },
   {
-    "name": "aaa-counts-twice",
+    "name": "overlapping-pairs-count",
     "args": [
       "top-pair",
       "ids.json"
     ],
     "files": {
-      "ids.json": "[97, 97, 97]"
+      "ids.json": "[5, 5, 5, 6, 7, 6, 7]"
+    },
+    "expected": [
+      5,
+      5
+    ]
+  },
+  {
+    "name": "aaabdaaabac",
+    "args": [
+      "top-pair",
+      "ids.json"
+    ],
+    "files": {
+      "ids.json": "[97, 97, 97, 98, 100, 97, 97, 97, 98, 97, 99]"
     },
     "expected": [
       97,
       97
-    ]
-  },
-  {
-    "name": "single-pair",
-    "args": [
-      "top-pair",
-      "ids.json"
-    ],
-    "files": {
-      "ids.json": "[4, 5]"
-    },
-    "expected": [
-      4,
-      5
     ]
   }
 ]
