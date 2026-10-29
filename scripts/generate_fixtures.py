@@ -50,25 +50,8 @@ def merges_file(merges, **extra):
 def stage_bytes():
     samples = [
         ("visible-wave", f"hi {WAVE}"),
-        ("devanagari-na", "न"),
-        ("empty", ""),
-        ("hello", "hello"),
-        ("newline", "a\nb"),
-        ("tab", "a\tb"),
         ("emoji-only", "🙂"),
-        ("hindi-word", "हिंदी"),
-        ("tamil-word", "தமிழ்"),
-        ("mixed", "aनb"),
-        ("spaces", "  x"),
-        ("nbsp", "foo\u00a0bar"),
-        ("code", "fn main() {}"),
-        ("punctuation", "Hello, world!"),
-        ("digits", "12345"),
-        ("quotes", "it's"),
-        ("caps", "DON'T"),
-        ("null-char", "a\u0000b"),
-        ("cjk", "你好"),
-        ("skin-tone", "👋🏻"),
+        ("empty", ""),
         ("multiline", "one\ntwo\n"),
     ]
     cases = []

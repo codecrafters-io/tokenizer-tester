@@ -105,7 +105,7 @@ stages:
     name: "UTF-8 bytes"
     difficulty: very_easy
     marketing_md: |-
-      In this stage, you'll implement the `bytes` command.
+      In this stage, you'll implement the first step of a tokenizer, a `bytes` command that converts text into UTF-8 bytes.
   - slug: "gk8"
     name: "Most frequent pair"
     difficulty: easy
