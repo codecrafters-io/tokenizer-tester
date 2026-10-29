@@ -17,7 +17,7 @@ var testerDefinition = tester_definition.TesterDefinition{
 		{Slug: "kz6", TestFunc: testEncode},
 		{Slug: "vg5", TestFunc: testDecode},
 		// runFixture caps each execution at 15s. The stage cap covers every run.
-		{Slug: "wl7", TestFunc: testPretokenize, Timeout: 31*15*time.Second + 30*time.Second},
-		{Slug: "as1", TestFunc: testGPT2Match, Timeout: 52*15*time.Second + 30*time.Second},
+		{Slug: "wl7", TestFunc: testPretokenize, Timeout: 4*15*time.Second + 30*time.Second},
+		{Slug: "as1", TestFunc: testGPT2Match, Timeout: 4*15*time.Second + 30*time.Second},
 	},
 }

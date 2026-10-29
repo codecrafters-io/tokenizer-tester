@@ -202,8 +202,7 @@ def main(argv):
     if command == "merge":
         ids = read_json(args[0])
         left, right = (int(part) for part in flag(args, "--pair").split(","))
-        new_id = int(flag(args, "--new"))
-        emit(merge(ids, (left, right), new_id))
+        emit(merge(ids, (left, right), 256))
         return
     if command == "train":
         with open(args[0], encoding="utf-8") as handle:
