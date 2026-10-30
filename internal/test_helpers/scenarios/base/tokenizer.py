@@ -113,14 +113,19 @@ def bytes_to_unicode():
 
 
 def load_merges_txt(path):
-    pairs = []
+    """Skip blank lines and only a leading `#version` line.
+
+    Later lines that start with `#` are real merges, such as `# #`.
+    """
     with open(path, encoding="utf-8") as handle:
-        for line in handle:
-            line = line.rstrip("\n")
-            if not line or line.startswith("#"):
-                continue
-            left, right = line.split(" ", 1)
-            pairs.append((left, right))
+        lines = handle.read().splitlines()
+    start = 1 if lines and lines[0].startswith("#version") else 0
+    pairs = []
+    for line in lines[start:]:
+        if line == "":
+            continue
+        left, right = line.split(" ", 1)
+        pairs.append((left, right))
     return pairs
 
 

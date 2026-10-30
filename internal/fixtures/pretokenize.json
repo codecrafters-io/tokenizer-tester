@@ -32,10 +32,17 @@
       51,
       33,
       33
+    ],
+    "chunks": [
+      "Hello",
+      " world",
+      "'s",
+      " 123",
+      "!!"
     ]
   },
   {
-    "name": "uppercase-contraction",
+    "name": "uppercase-stays-split",
     "args": [
       "encode",
       "text.txt",
@@ -52,6 +59,11 @@
       257,
       39,
       84
+    ],
+    "chunks": [
+      "DON",
+      "'",
+      "T"
     ]
   },
   {
@@ -79,6 +91,12 @@
       224,
       165,
       128
+    ],
+    "chunks": [
+      "ह",
+      "िं",
+      "द",
+      "ी"
     ]
   },
   {
@@ -102,6 +120,76 @@
       98,
       97,
       114
+    ],
+    "chunks": [
+      "foo",
+      " ",
+      "bar"
+    ]
+  },
+  {
+    "name": "contraction-case",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[39, 116], [39, 84]]",
+      "text.txt": "don't DON'T"
+    },
+    "expected": [
+      100,
+      111,
+      110,
+      256,
+      32,
+      68,
+      79,
+      78,
+      39,
+      84
+    ],
+    "chunks": [
+      "don",
+      "'t",
+      " DON",
+      "'",
+      "T"
+    ]
+  },
+  {
+    "name": "two-non-breaking-spaces",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[194, 160], [256, 256], [256, 98]]",
+      "text.txt": "foo  bar"
+    },
+    "expected": [
+      102,
+      111,
+      111,
+      256,
+      256,
+      98,
+      97,
+      114
+    ],
+    "chunks": [
+      "foo",
+      " ",
+      " ",
+      "bar"
     ]
   }
 ]

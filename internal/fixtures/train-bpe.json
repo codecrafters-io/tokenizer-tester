@@ -330,5 +330,35 @@
         270
       ]
     ]
+  },
+  {
+    "name": "non-ascii",
+    "args": [
+      "train",
+      "corpus.txt",
+      "--merges",
+      "4"
+    ],
+    "files": {
+      "corpus.txt": "café café 👋👋\ncafé café 👋👋"
+    },
+    "expected": [
+      [
+        99,
+        97
+      ],
+      [
+        256,
+        102
+      ],
+      [
+        257,
+        195
+      ],
+      [
+        258,
+        169
+      ]
+    ]
   }
 ]

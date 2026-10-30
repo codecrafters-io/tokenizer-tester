@@ -71,5 +71,24 @@
       97,
       99
     ]
+  },
+  {
+    "name": "order-and-digits",
+    "args": [
+      "merge",
+      "ids.json",
+      "--pair",
+      "1,2"
+    ],
+    "files": {
+      "ids.json": "[11, 2, 2, 1, 1, 2]"
+    },
+    "expected": [
+      11,
+      2,
+      2,
+      1,
+      256
+    ]
   }
 ]

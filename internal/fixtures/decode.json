@@ -54,5 +54,33 @@
       "ids.json": "[255, 255]"
     },
     "expected": "��"
+  },
+  {
+    "name": "json-escaping",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[]",
+      "ids.json": "[34, 104, 105, 34, 92, 10]"
+    },
+    "expected": "\"hi\"\\\n"
+  },
+  {
+    "name": "emoji-across-tokens",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[[240, 159], [145, 139]]",
+      "ids.json": "[256, 257]"
+    },
+    "expected": "👋"
   }
 ]
