@@ -23,6 +23,7 @@ type fixtureCase struct {
 	Args     []string          `json:"args"`
 	Files    map[string]string `json:"files"`
 	Expected json.RawMessage   `json:"expected"`
+	Chunks   []string          `json:"chunks,omitempty"`
 }
 
 func runFixture(harness *test_case_harness.TestCaseHarness, slug string) error {
@@ -79,19 +80,26 @@ func runFixture(harness *test_case_harness.TestCaseHarness, slug string) error {
 		executable.TimeoutInMilliseconds = 15 * 1000
 		result, err := executable.Run(testCase.Args...)
 		if err != nil {
-			return fmt.Errorf("%s: %w", testCase.Name, err)
+			message := err.Error()
+			if slug == "encode" && strings.Contains(message, "timed out") {
+				message += ". A timeout usually means the loop never stops"
+			}
+			return fmt.Errorf("%s: %s%s", testCase.Name, message, chunksSuffix(testCase))
+		}
+		if result.ExitCode != 0 && len(bytes.TrimSpace(result.Stdout)) == 0 {
+			return fmt.Errorf("%s: your program exited with code %d and printed nothing to stdout%s", testCase.Name, result.ExitCode, chunksSuffix(testCase))
 		}
 
 		actual, err := parseJSONValue(result.Stdout)
 		if err != nil {
-			return fmt.Errorf("%s: %w\nstdout: %q", testCase.Name, err, result.Stdout)
+			return fmt.Errorf("%s: %w%s", testCase.Name, err, chunksSuffix(testCase))
 		}
 		expected, err := parseJSONValue(testCase.Expected)
 		if err != nil {
 			return fmt.Errorf("%s: fixture: %w", testCase.Name, err)
 		}
 		if !reflect.DeepEqual(actual, expected) {
-			return fmt.Errorf("%s: expected %s, got %s", testCase.Name, preview(expected), preview(actual))
+			return fmt.Errorf("%s: %s%s%s", testCase.Name, mismatch(expected, actual), hint(slug, testCase, actual), chunksSuffix(testCase))
 		}
 		logger.Successf("%s passed", testCase.Name)
 	}
@@ -117,21 +125,158 @@ func materializeGPT2(workDir string) error {
 }
 
 func parseJSONValue(raw []byte) (any, error) {
+	if len(bytes.TrimSpace(raw)) == 0 {
+		return nil, fmt.Errorf("expected a JSON value on stdout, like [104, 105], but your program printed nothing")
+	}
 	dec := json.NewDecoder(bytes.NewReader(bytes.TrimSpace(raw)))
 	dec.UseNumber()
 	var value any
 	if err := dec.Decode(&value); err != nil {
-		return nil, fmt.Errorf("stdout is not one JSON value: %w", err)
+		if errors.Is(err, io.EOF) {
+			return nil, fmt.Errorf("expected a JSON value on stdout, like [104, 105], but your program printed nothing")
+		}
+		return nil, fmt.Errorf("expected a JSON value on stdout, like [104, 105]: %w", err)
 	}
 	var trailing any
 	err := dec.Decode(&trailing)
-	if err == nil {
-		return nil, fmt.Errorf("stdout has extra data after the JSON value")
-	}
-	if !errors.Is(err, io.EOF) {
-		return nil, fmt.Errorf("stdout has extra data after the JSON value: %w", err)
+	if err == nil || !errors.Is(err, io.EOF) {
+		lines := lineCount(raw)
+		if lines > 1 {
+			return nil, fmt.Errorf("expected one JSON value on stdout, got %d lines. Send debug output to stderr", lines)
+		}
+		return nil, fmt.Errorf("expected one JSON value on stdout, got extra data after it. Send debug output to stderr")
 	}
 	return normalize(value), nil
+}
+
+func lineCount(raw []byte) int {
+	if len(raw) == 0 {
+		return 0
+	}
+	count := bytes.Count(raw, []byte("\n"))
+	if raw[len(raw)-1] != '\n' {
+		count++
+	}
+	return count
+}
+
+func mismatch(expected, actual any) string {
+	if message, ok := firstDifference(expected, actual); ok {
+		return message
+	}
+	return fmt.Sprintf("expected %s, got %s", preview(expected), preview(actual))
+}
+
+func firstDifference(expected, actual any) (string, bool) {
+	exp, expOK := expected.([]any)
+	act, actOK := actual.([]any)
+	if expOK && actOK {
+		limit := len(exp)
+		if len(act) < limit {
+			limit = len(act)
+		}
+		for i := 0; i < limit; i++ {
+			if reflect.DeepEqual(exp[i], act[i]) {
+				continue
+			}
+			return fmt.Sprintf("first difference at index %d: expected %s, got %s", i, preview(exp[i]), preview(act[i])), true
+		}
+		if len(exp) != len(act) {
+			return fmt.Sprintf("first difference at index %d: expected %d values, got %d", limit, len(exp), len(act)), true
+		}
+	}
+	if expText, ok := expected.(string); ok {
+		actText, ok := actual.(string)
+		if !ok {
+			return "", false
+		}
+		return fmt.Sprintf("expected %s, got %s", fmt.Sprintf("%+q", expText), fmt.Sprintf("%+q", actText)), true
+	}
+	return "", false
+}
+
+func hint(slug string, testCase fixtureCase, actual any) string {
+	switch slug {
+	case "utf8-bytes":
+		if numberAbove255(actual) {
+			return ". Numbers above 255 mean you printed characters, not bytes"
+		}
+	case "apply-merge":
+		if sameJSON(testCase.Files["ids.json"], actual) {
+			return ". The output matches the input, so nothing got merged"
+		}
+	case "encode":
+		if sameUTF8Bytes(testCase.Files["text.txt"], actual) {
+			return ". The output matches the input bytes, so nothing got merged"
+		}
+	case "gpt2-match":
+		if containsNull(actual) {
+			return ". A null id means a piece isn't in vocab.json, which usually means the byte-to-character table is off"
+		}
+	}
+	return ""
+}
+
+func numberAbove255(value any) bool {
+	switch typed := value.(type) {
+	case []any:
+		for _, item := range typed {
+			if numberAbove255(item) {
+				return true
+			}
+		}
+	case json.Number:
+		number, err := typed.Int64()
+		return err == nil && number > 255
+	}
+	return false
+}
+
+func containsNull(value any) bool {
+	switch typed := value.(type) {
+	case nil:
+		return true
+	case []any:
+		for _, item := range typed {
+			if containsNull(item) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func sameJSON(raw string, actual any) bool {
+	if raw == "" {
+		return false
+	}
+	parsed, err := parseJSONValue([]byte(raw))
+	if err != nil {
+		return false
+	}
+	return reflect.DeepEqual(parsed, actual)
+}
+
+func sameUTF8Bytes(text string, actual any) bool {
+	if _, ok := actual.([]any); !ok && text == "" {
+		return false
+	}
+	numbers := make([]any, len(text))
+	for i, value := range []byte(text) {
+		numbers[i] = json.Number(strconv.Itoa(int(value)))
+	}
+	return reflect.DeepEqual(numbers, actual)
+}
+
+func chunksSuffix(testCase fixtureCase) string {
+	if len(testCase.Chunks) == 0 {
+		return ""
+	}
+	quoted := make([]string, len(testCase.Chunks))
+	for i, chunk := range testCase.Chunks {
+		quoted[i] = fmt.Sprintf("%+q", chunk)
+	}
+	return ". Chunks: " + strings.Join(quoted, " ")
 }
 
 func normalize(value any) any {
@@ -149,6 +294,9 @@ func normalize(value any) any {
 }
 
 func preview(value any) string {
+	if text, ok := value.(string); ok {
+		return fmt.Sprintf("%+q", text)
+	}
 	encoded, err := json.Marshal(value)
 	if err != nil {
 		return fmt.Sprint(value)

@@ -16,7 +16,7 @@
     ]
   },
   {
-    "name": "visible-leading-space",
+    "name": "strawberry-leading-space",
     "args": [
       "encode",
       "text.txt",
@@ -24,11 +24,13 @@
       "gpt2"
     ],
     "files": {
-      "text.txt": " Hello world"
+      "text.txt": "strawberry strawberry"
     },
     "expected": [
-      18435,
-      995
+      301,
+      1831,
+      8396,
+      41236
     ]
   },
   {
@@ -93,6 +95,26 @@
       198,
       92,
       198
+    ]
+  },
+  {
+    "name": "markdown-heading",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "## Title\n\nSome text"
+    },
+    "expected": [
+      2235,
+      11851,
+      198,
+      198,
+      4366,
+      2420
     ]
   }
 ]

@@ -50,6 +50,24 @@
     "expected": []
   },
   {
+    "name": "leftmost-merge-first",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[[98, 98], [97, 98]]",
+      "text.txt": "abbb"
+    },
+    "expected": [
+      97,
+      256,
+      98
+    ]
+  },
+  {
     "name": "rank-not-frequency",
     "args": [
       "encode",
@@ -64,6 +82,25 @@
     "expected": [
       97,
       256,
+      256
+    ]
+  },
+  {
+    "name": "non-ascii",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[[195, 169]]",
+      "text.txt": "café"
+    },
+    "expected": [
+      99,
+      97,
+      102,
       256
     ]
   }

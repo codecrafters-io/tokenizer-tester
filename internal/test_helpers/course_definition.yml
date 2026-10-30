@@ -7,12 +7,12 @@ short_name: "Tokenizer"
 release_status: "alpha"
 
 description_md: |-
-  A tokenizer turns text into the integers a language model understands. In this challenge, you'll build a byte-pair encoding tokenizer that's capable of training a vocabulary, encoding text, and decoding token IDs.
+  Why do language models miscount the r's in "strawberry"? GPT-2 never sees the letters. Its tokenizer hands it `st`, `raw`, and `berry`. In this challenge, you'll build a tokenizer that splits text into the same tokens as GPT-2.
 
-  Along the way, you'll learn about byte-level BPE, pretokenization, and GPT-2's encoding.
+  Along the way, you'll learn about byte-pair encoding, UTF-8, and more.
 
 short_description_md: |-
-  Learn about byte-level BPE, pretokenization, and GPT-2
+  Learn about byte-pair encoding, UTF-8, and more
 
 completion_percentage: 5
 
@@ -37,15 +37,16 @@ marketing:
   frequently_asked_questions:
     - question_markdown: "What exactly will I build?"
       answer_markdown: |-
-        You'll build a byte-pair encoding tokenizer. By the end of the base stages, it can train a vocabulary, encode text into token IDs, and decode those IDs back into text.
+        You'll build a byte-pair encoding tokenizer. It reads a text file and learns which pairs of bytes to merge into new tokens. It encodes text into token IDs and decodes the IDs back into text.
 
-        In the last stage, your program loads GPT-2's vocabulary files and produces the same token IDs as GPT-2, so GPT-2 itself could read them.
+        In the last stage, your program loads GPT-2's vocabulary files and produces the same token IDs as OpenAI's GPT-2 tokenizer, like `[15496, 995]` for `Hello world`.
 
-        Later extensions add:
+        Planned extensions:
         * Reserved tokens such as `<|endoftext|>`
         * Token counts across languages
         * A faster encoder
         * A vocabulary trained on a different language like Hindi or Spanish
+        * GPT-4's tokenizer, where you work out its merges from token ranks and split numbers into groups of up to 3 digits, so ` 1999` becomes ` `, `199`, and `9`
 
         At the end, you'll have a GitHub repo to show off.
     - question_markdown: "What exactly will I learn?"
@@ -60,9 +61,9 @@ marketing:
         As your code gets complex, you'll be forced to structure and refactor it, to avoid regressions and to make adding new features easier.
     - question_markdown: "Why should I build such a project?"
       answer_markdown: |-
-        Every language model reads integers, not text. Building the tokenizer shows you why the same sentence can be cheap in English and expensive in Hindi, and why a space is part of the next word.
+        Some of the strangest things language models do start in the tokenizer. GPT-2 sees `strawberry` as `st`, `raw`, and `berry`, so the letters it is asked to count are hidden inside tokens. In ` 1999 + 2026`, it sees ` 1999` as one token and `2026` as `20` and `26`.
 
-        You'll finish with a program whose token IDs match a real GPT-2 model. That is the piece you need before you can run the model yourself.
+        You'll build the tokenizer yourself and watch these splits happen. Your finished program produces the same token IDs as GPT-2, which is one piece you need to run the model yourself.
     - question_markdown: "What are the prerequisites for this challenge?"
       answer_markdown: |-
         You should be comfortable writing code in Python, Rust, Go, C++, TypeScript, or Java, and using Git. No machine learning background is required.
@@ -79,39 +80,39 @@ stages:
     name: "UTF-8 bytes"
     difficulty: very_easy
     marketing_md: |-
-      In this stage, you'll implement the first step of a tokenizer, a `bytes` command that converts text into UTF-8 bytes.
+      In this stage, you'll implement the `bytes` command to convert text into UTF-8 bytes, the raw material of every GPT-2 token.
   - slug: "gk8"
     name: "Most frequent pair"
     difficulty: easy
     marketing_md: |-
-      In this stage, you'll implement the `top-pair` command to find the most frequent pair of token ids.
+      In this stage, you'll implement the `top-pair` command to find the pair of tokens a tokenizer should combine next.
   - slug: "fk3"
-    name: "Apply a merge"
+    name: "Merge a pair"
     difficulty: easy
     marketing_md: |-
-      In this stage, you'll implement the `merge` command to replace a pair of ids with a new id.
+      In this stage, you'll implement the `merge` command to combine a pair of tokens into a new token.
   - slug: "ur9"
-    name: "Train BPE"
+    name: "Learn merges"
     difficulty: medium
     marketing_md: |-
-      In this stage, you'll implement the `train` command to merge the most frequent pair, over and over.
+      In this stage, you'll implement the `train` command to learn which pairs to merge from a text file.
   - slug: "kz6"
     name: "Encode"
     difficulty: medium
     marketing_md: |-
-      In this stage, you'll encode new text by applying the earliest merge that still appears.
+      In this stage, you'll implement the `encode` command to turn new text into token ids with a list of learned merges.
   - slug: "vg5"
     name: "Decode"
     difficulty: medium
     marketing_md: |-
-      In this stage, you'll turn token ids back into text, including bytes that are not valid UTF-8.
+      In this stage, you'll implement the `decode` command to turn token ids back into text.
   - slug: "wl7"
-    name: "Pretokenize"
+    name: "Split like GPT-2"
     difficulty: medium
     marketing_md: |-
-      In this stage, you'll split text the way GPT-2 does before any merge is applied.
+      In this stage, you'll implement the `--pretokenize gpt2` option to split text into chunks before merging, the way GPT-2 does.
   - slug: "as1"
     name: "Match GPT-2"
     difficulty: hard
     marketing_md: |-
-      In this stage, you'll load GPT-2's vocabulary and produce the same token ids as tiktoken.
+      In this stage, you'll implement the `--vocab` option to produce GPT-2's exact token ids from its vocabulary files.
