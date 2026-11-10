@@ -22,11 +22,18 @@ GPT2_DIR = OUT / "gpt2"
 WAVE = "👋"
 
 
-def case(name, args, files, expected, chunks=None):
+def case(name, args, files, expected, chunks=None, repeat=None):
     row = {"name": name, "args": args, "files": files, "expected": expected}
     if chunks is not None:
         row["chunks"] = chunks
+    if repeat is not None:
+        row["repeat"] = repeat
     return row
+
+
+# Tie cases run this many times, each in a fresh process. A program that picks
+# among tied pairs by hash map iteration order can pass a single run by luck.
+TIE_RUNS = 5
 
 
 def gpt2_chunks(text):
@@ -74,6 +81,9 @@ def stage_top_pair():
         # (1, 2) and (3, 4) both appear twice. (3, 4) reaches 2 first, but
         # (1, 2) appears first.
         ("tie-first-occurrence", [1, 2, 3, 4, 3, 4, 1, 2]),
+        # 12 different pairs, each once. The first pair is neither the
+        # smallest nor the largest, so sorting can't land on it either.
+        ("many-way-tie", [50, 7, 33, 12, 41, 3, 28, 19, 45, 9, 36, 24, 15]),
         # (5, 5) ties (8, 9) only when the overlapping (5, 5) counts.
         # No reversed pair is in this list, so treating (a, b) and (b, a)
         # as one pair still returns [5, 5].
@@ -88,9 +98,11 @@ def stage_top_pair():
         ("multi-digit-ids", [1, 12, 5, 11, 2, 6, 7, 8, 7, 8]),
         ("aaabdaaabac", corpus),
     ]
+    tie_cases = {"tie-first-pair-wins", "tie-first-occurrence", "many-way-tie"}
     cases = []
     for name, ids in sequences:
-        cases.append(case(name, ["top-pair", "ids.json"], ids_file(ids), reference.top_pair(ids)))
+        repeat = TIE_RUNS if name in tie_cases else None
+        cases.append(case(name, ["top-pair", "ids.json"], ids_file(ids), reference.top_pair(ids), repeat=repeat))
     write_stage("top-pair", cases)
 
 
