@@ -11,7 +11,8 @@ var testerDefinition = tester_definition.TesterDefinition{
 	ExecutableFileName: "your_program.sh",
 	TestCases: []tester_definition.TestCase{
 		{Slug: "kx8", TestFunc: testUTF8Bytes},
-		{Slug: "gk8", TestFunc: testTopPair},
+		// The tie cases run 5 times each, so this stage runs the program 22 times.
+		{Slug: "gk8", TestFunc: testTopPair, Timeout: 22*15*time.Second + 30*time.Second},
 		{Slug: "fk3", TestFunc: testApplyMerge},
 		{Slug: "ur9", TestFunc: testTrainBPE},
 		{Slug: "kz6", TestFunc: testEncode},

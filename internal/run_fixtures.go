@@ -24,6 +24,10 @@ type fixtureCase struct {
 	Files    map[string]string `json:"files"`
 	Expected json.RawMessage   `json:"expected"`
 	Chunks   []string          `json:"chunks,omitempty"`
+	// Repeat runs the case this many times, each in a fresh process. Tie
+	// cases use it so a program that picks among tied pairs by hash map
+	// iteration order can't pass by luck.
+	Repeat int `json:"repeat,omitempty"`
 }
 
 func runFixture(harness *test_case_harness.TestCaseHarness, slug string) error {
@@ -37,74 +41,99 @@ func runFixture(harness *test_case_harness.TestCaseHarness, slug string) error {
 		return fmt.Errorf("parse fixtures for %s: %w", slug, err)
 	}
 
-	logger := harness.Logger
 	for _, testCase := range cases {
-		workDir, err := os.MkdirTemp("", "tokenizer-"+slug+"-")
-		if err != nil {
-			return err
-		}
-		defer os.RemoveAll(workDir)
-
-		names := make([]string, 0, len(testCase.Files))
-		for name := range testCase.Files {
-			names = append(names, name)
-		}
-		sort.Strings(names)
-		sort.SliceStable(names, func(i, j int) bool {
-			return argPosition(testCase.Args, names[i]) < argPosition(testCase.Args, names[j])
-		})
-
-		for _, name := range names {
-			contents := testCase.Files[name]
-			path := filepath.Join(workDir, name)
-			if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		runs := max(testCase.Repeat, 1)
+		for run := 1; run <= runs; run++ {
+			if err := runFixtureCase(harness, slug, testCase, run, runs); err != nil {
 				return err
 			}
-			if err := os.WriteFile(path, []byte(contents), 0o644); err != nil {
-				return err
-			}
-			logger.Infof("Wrote %s: %s", name, describeFile(name, contents))
 		}
-
-		if contains(testCase.Args, "--vocab") {
-			if err := materializeGPT2(workDir); err != nil {
-				return err
-			}
-			logger.Infof("Wrote GPT-2's vocabulary to gpt2/vocab.json and gpt2/merges.txt")
-		}
-
-		logger.Infof("$ ./%s %s", filepath.Base(harness.Executable.Path), strings.Join(testCase.Args, " "))
-
-		executable := harness.NewExecutable()
-		executable.WorkingDir = workDir
-		executable.TimeoutInMilliseconds = 15 * 1000
-		result, err := executable.Run(testCase.Args...)
-		if err != nil {
-			message := err.Error()
-			if slug == "encode" && strings.Contains(message, "timed out") {
-				message += ". A timeout usually means the loop never stops"
-			}
-			return fmt.Errorf("%s: %s%s", testCase.Name, message, chunksSuffix(testCase))
-		}
-		if result.ExitCode != 0 && len(bytes.TrimSpace(result.Stdout)) == 0 {
-			return fmt.Errorf("%s: your program exited with code %d and printed nothing to stdout%s", testCase.Name, result.ExitCode, chunksSuffix(testCase))
-		}
-
-		actual, err := parseJSONValue(result.Stdout)
-		if err != nil {
-			return fmt.Errorf("%s: %w%s", testCase.Name, err, chunksSuffix(testCase))
-		}
-		expected, err := parseJSONValue(testCase.Expected)
-		if err != nil {
-			return fmt.Errorf("%s: fixture: %w", testCase.Name, err)
-		}
-		if !reflect.DeepEqual(actual, expected) {
-			return fmt.Errorf("%s: %s%s%s", testCase.Name, mismatch(expected, actual), hint(slug, testCase, actual), chunksSuffix(testCase))
-		}
-		logger.Successf("%s passed", testCase.Name)
+		harness.Logger.Successf("%s passed", testCase.Name)
 	}
 
 	return nil
+}
+
+func runFixtureCase(harness *test_case_harness.TestCaseHarness, slug string, testCase fixtureCase, run, runs int) error {
+	logger := harness.Logger
+	workDir, err := os.MkdirTemp("", "tokenizer-"+slug+"-")
+	if err != nil {
+		return err
+	}
+	defer os.RemoveAll(workDir)
+
+	names := make([]string, 0, len(testCase.Files))
+	for name := range testCase.Files {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	sort.SliceStable(names, func(i, j int) bool {
+		return argPosition(testCase.Args, names[i]) < argPosition(testCase.Args, names[j])
+	})
+
+	for _, name := range names {
+		contents := testCase.Files[name]
+		path := filepath.Join(workDir, name)
+		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			return err
+		}
+		if err := os.WriteFile(path, []byte(contents), 0o644); err != nil {
+			return err
+		}
+		if run == 1 {
+			logger.Infof("Wrote %s: %s", name, describeFile(name, contents))
+		}
+	}
+
+	if contains(testCase.Args, "--vocab") {
+		if err := materializeGPT2(workDir); err != nil {
+			return err
+		}
+		if run == 1 {
+			logger.Infof("Wrote GPT-2's vocabulary to gpt2/vocab.json and gpt2/merges.txt")
+		}
+	}
+
+	if run > 1 {
+		logger.Infof("Running %s again in a fresh process (run %d of %d)", testCase.Name, run, runs)
+	}
+	logger.Infof("$ ./%s %s", filepath.Base(harness.Executable.Path), strings.Join(testCase.Args, " "))
+
+	executable := harness.NewExecutable()
+	executable.WorkingDir = workDir
+	executable.TimeoutInMilliseconds = 15 * 1000
+	result, err := executable.Run(testCase.Args...)
+	if err != nil {
+		message := err.Error()
+		if slug == "encode" && strings.Contains(message, "timed out") {
+			message += ". A timeout usually means the loop never stops"
+		}
+		return fmt.Errorf("%s: %s%s", testCase.Name, message, chunksSuffix(testCase))
+	}
+	if result.ExitCode != 0 && len(bytes.TrimSpace(result.Stdout)) == 0 {
+		return fmt.Errorf("%s: your program exited with code %d and printed nothing to stdout%s", testCase.Name, result.ExitCode, chunksSuffix(testCase))
+	}
+
+	actual, err := parseJSONValue(result.Stdout)
+	if err != nil {
+		return fmt.Errorf("%s: %w%s", testCase.Name, err, chunksSuffix(testCase))
+	}
+	expected, err := parseJSONValue(testCase.Expected)
+	if err != nil {
+		return fmt.Errorf("%s: fixture: %w", testCase.Name, err)
+	}
+	if !reflect.DeepEqual(actual, expected) {
+		return fmt.Errorf("%s: %s%s%s%s", testCase.Name, mismatch(expected, actual), hint(slug, testCase, actual), repeatHint(run), chunksSuffix(testCase))
+	}
+
+	return nil
+}
+
+func repeatHint(run int) string {
+	if run == 1 {
+		return ""
+	}
+	return fmt.Sprintf(". The same input passed on run 1 and failed on run %d, so your output changes between runs. Hash map iteration order is random in many languages, so pick the winner of a tie by where the pair first appears, not by the order the map gives you", run)
 }
 
 func materializeGPT2(workDir string) error {
@@ -200,6 +229,10 @@ func hint(slug string, testCase fixtureCase, actual any) string {
 	case "utf8-bytes":
 		if numberAbove255(actual) {
 			return ". Numbers above 255 mean you printed characters, not bytes"
+		}
+	case "top-pair":
+		if testCase.Repeat > 1 {
+			return ". These pairs tie, so the one that appears first, reading left to right, wins"
 		}
 	case "apply-merge":
 		if sameJSON(testCase.Files["ids.json"], actual) {

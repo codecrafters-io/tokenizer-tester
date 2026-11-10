@@ -25,7 +25,8 @@
     "expected": [
       8,
       9
-    ]
+    ],
+    "repeat": 5
   },
   {
     "name": "tie-first-occurrence",
@@ -39,7 +40,23 @@
     "expected": [
       1,
       2
-    ]
+    ],
+    "repeat": 5
+  },
+  {
+    "name": "many-way-tie",
+    "args": [
+      "top-pair",
+      "ids.json"
+    ],
+    "files": {
+      "ids.json": "[50, 7, 33, 12, 41, 3, 28, 19, 45, 9, 36, 24, 15]"
+    },
+    "expected": [
+      50,
+      7
+    ],
+    "repeat": 5
   },
   {
     "name": "overlapping-pairs-count",
