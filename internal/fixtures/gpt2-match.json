@@ -116,5 +116,25 @@
       4366,
       2420
     ]
+  },
+  {
+    "name": "progress-sentence",
+    "args": [
+      "encode",
+      "text.txt",
+      "--vocab",
+      "gpt2"
+    ],
+    "files": {
+      "text.txt": "to the top of the tree"
+    },
+    "expected": [
+      1462,
+      262,
+      1353,
+      286,
+      262,
+      5509
+    ]
   }
 ]

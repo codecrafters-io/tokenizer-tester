@@ -82,5 +82,19 @@
       "ids.json": "[256, 257]"
     },
     "expected": "👋"
+  },
+  {
+    "name": "progress-sentence",
+    "args": [
+      "decode",
+      "ids.json",
+      "--merges",
+      "merges.json"
+    ],
+    "files": {
+      "merges.json": "[[32, 116], [256, 104], [257, 101], [258, 256], [116, 111]]",
+      "ids.json": "[260, 259, 111, 112, 32, 111, 102, 259, 114, 101, 101]"
+    },
+    "expected": "to the top of the tree"
   }
 ]

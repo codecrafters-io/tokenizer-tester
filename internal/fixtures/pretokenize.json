@@ -191,5 +191,43 @@
       " ",
       "bar"
     ]
+  },
+  {
+    "name": "progress-sentence",
+    "args": [
+      "encode",
+      "text.txt",
+      "--merges",
+      "merges.json",
+      "--pretokenize",
+      "gpt2"
+    ],
+    "files": {
+      "merges.json": "[[32, 116], [256, 104], [257, 101], [258, 256], [116, 111]]",
+      "text.txt": "to the top of the tree"
+    },
+    "expected": [
+      260,
+      258,
+      256,
+      111,
+      112,
+      32,
+      111,
+      102,
+      258,
+      256,
+      114,
+      101,
+      101
+    ],
+    "chunks": [
+      "to",
+      " the",
+      " top",
+      " of",
+      " the",
+      " tree"
+    ]
   }
 ]
