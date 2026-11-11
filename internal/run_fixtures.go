@@ -122,8 +122,18 @@ func runFixtureCase(harness *test_case_harness.TestCaseHarness, slug string, tes
 	if err != nil {
 		return fmt.Errorf("%s: fixture: %w", testCase.Name, err)
 	}
+	usesGPT2 := contains(testCase.Args, "--vocab")
 	if !reflect.DeepEqual(actual, expected) {
-		return fmt.Errorf("%s: %s%s%s%s", testCase.Name, mismatch(expected, actual), hint(slug, testCase, actual), repeatHint(run), chunksSuffix(testCase))
+		pieces := ""
+		if usesGPT2 {
+			pieces = piecesSuffix(expected, actual)
+		}
+		return fmt.Errorf("%s: %s%s%s%s%s", testCase.Name, mismatch(expected, actual), hint(slug, testCase, actual), repeatHint(run), chunksSuffix(testCase), pieces)
+	}
+	if usesGPT2 && run == 1 {
+		if line, ok := piecesLine(actual); ok {
+			logger.Infof("%s", line)
+		}
 	}
 
 	return nil
