@@ -153,7 +153,7 @@ def stage_train():
         cases.append(
             case(
                 name,
-                ["train", "corpus.txt", "--merges", str(count)],
+                ["train", "corpus.txt", "--num-merges", str(count)],
                 text_file("corpus.txt", text),
                 expected,
             )

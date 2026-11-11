@@ -4,7 +4,7 @@
     "args": [
       "train",
       "corpus.txt",
-      "--merges",
+      "--num-merges",
       "3"
     ],
     "files": {
@@ -30,7 +30,7 @@
     "args": [
       "train",
       "corpus.txt",
-      "--merges",
+      "--num-merges",
       "6"
     ],
     "files": {
@@ -68,7 +68,7 @@
     "args": [
       "train",
       "corpus.txt",
-      "--merges",
+      "--num-merges",
       "10"
     ],
     "files": {
@@ -122,7 +122,7 @@
     "args": [
       "train",
       "corpus.txt",
-      "--merges",
+      "--num-merges",
       "50"
     ],
     "files": {
@@ -336,7 +336,7 @@
     "args": [
       "train",
       "corpus.txt",
-      "--merges",
+      "--num-merges",
       "4"
     ],
     "files": {

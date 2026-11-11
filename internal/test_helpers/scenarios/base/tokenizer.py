@@ -212,7 +212,7 @@ def main(argv):
     if command == "train":
         with open(args[0], encoding="utf-8") as handle:
             text = handle.read()
-        emit(train(text, int(flag(args, "--merges"))))
+        emit(train(text, int(flag(args, "--num-merges"))))
         return
     if command == "encode":
         with open(args[0], encoding="utf-8") as handle:
