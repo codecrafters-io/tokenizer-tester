@@ -360,5 +360,39 @@
         169
       ]
     ]
+  },
+  {
+    "name": "progress-sentence",
+    "args": [
+      "train",
+      "corpus.txt",
+      "--num-merges",
+      "5"
+    ],
+    "files": {
+      "corpus.txt": "to the top of the tree"
+    },
+    "expected": [
+      [
+        32,
+        116
+      ],
+      [
+        256,
+        104
+      ],
+      [
+        257,
+        101
+      ],
+      [
+        258,
+        256
+      ],
+      [
+        116,
+        111
+      ]
+    ]
   }
 ]

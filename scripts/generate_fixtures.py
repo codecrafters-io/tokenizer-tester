@@ -21,6 +21,20 @@ OUT = TESTER / "internal" / "fixtures"
 GPT2_DIR = OUT / "gpt2"
 WAVE = "👋"
 
+# The stage descriptions follow this sentence in their "Your progress" blocks:
+# 22 bytes, 18 tokens after one merge, 11 after five merges learned from the
+# sentence itself, 13 once GPT-2's split blocks the merge that crosses chunks,
+# and 6 with GPT-2's vocabulary. Each stage runs it, so a learner's program
+# reproduces every number.
+PROGRESS = "to the top of the tree"
+PROGRESS_MERGES = 5
+
+
+def want_count(stage, ids, count):
+    if len(ids) != count:
+        raise SystemExit(f"{stage}: progress sentence is {len(ids)} tokens, the stage descriptions say {count}")
+    return ids
+
 
 def case(name, args, files, expected, chunks=None, repeat=None):
     row = {"name": name, "args": args, "files": files, "expected": expected}
@@ -66,7 +80,9 @@ def stage_bytes():
         ("emoji-only", "🙂"),
         ("empty", ""),
         ("multiline", "one\ntwo\n"),
+        ("progress-sentence", PROGRESS),
     ]
+    want_count("utf8-bytes", list(PROGRESS.encode()), 22)
     cases = []
     for name, text in samples:
         cases.append(case(name, ["bytes", "text.txt"], text_file("text.txt", text), list(text.encode("utf-8"))))
@@ -116,7 +132,10 @@ def stage_merge():
         # Only the last two ids are (1, 2). A reversed match also merges (2, 1).
         # A string replace of "1,2" also matches inside 11.
         ("order-and-digits", [11, 2, 2, 1, 1, 2], 1, 2),
+        # A space followed by t, GPT-2's first merge.
+        ("progress-sentence", list(PROGRESS.encode()), 32, 116),
     ]
+    want_count("apply-merge", reference.merge(list(PROGRESS.encode()), (32, 116), 256), 18)
     cases = []
     for name, ids, left, right in specs:
         cases.append(
@@ -142,6 +161,7 @@ def stage_train():
         "fifty-merges": (paragraph * 3, 50),
         # é is the two bytes 195, 169. A UTF-16 code unit sees it as 233.
         "non-ascii": ("café café 👋👋\ncafé café 👋👋", 4),
+        "progress-sentence": (PROGRESS, PROGRESS_MERGES),
     }
     cases = []
     for name, (text, count) in texts.items():
@@ -210,6 +230,15 @@ def stage_encode():
             reference.encode_text("café", cafe_merges),
         )
     )
+    progress_merges = reference.train(PROGRESS, PROGRESS_MERGES)
+    cases.append(
+        case(
+            "progress-sentence",
+            ["encode", "text.txt", "--merges", "merges.json"],
+            merges_file(progress_merges, **text_file("text.txt", PROGRESS)),
+            want_count("encode", reference.encode_text(PROGRESS, progress_merges), 11),
+        )
+    )
     write_stage("encode", cases)
 
 
@@ -225,6 +254,8 @@ def stage_decode():
         # 256 is the first two bytes of 👋 and 257 is the last two.
         ("emoji-across-tokens", [256, 257], [[240, 159], [145, 139]]),
     ]
+    progress_merges = reference.train(PROGRESS, PROGRESS_MERGES)
+    specs.append(("progress-sentence", reference.encode_text(PROGRESS, progress_merges), progress_merges))
     cases = []
     for name, ids, merge_list in specs:
         cases.append(
@@ -264,6 +295,12 @@ def stage_pretokenize():
     # token, and the second one does not stick to "bar".
     nbsp = "foo\u00a0\u00a0bar"
     cases.append(pre_case("two-non-breaking-spaces", nbsp, [[194, 160], [256, 256], [256, 98]]))
+    # The fourth merge joins " the" to the " t" of the next word. Those are
+    # different chunks, so it never applies. " the top" and " the tree" each
+    # keep one more token, which is why 11 becomes 13.
+    progress = pre_case("progress-sentence", PROGRESS, reference.train(PROGRESS, PROGRESS_MERGES))
+    want_count("pretokenize", progress["expected"], 13)
+    cases.append(progress)
     write_stage("pretokenize", cases)
 
 
@@ -276,7 +313,9 @@ def stage_gpt2():
         ("code", "fn main() {\n    return;\n}\n"),
         # ## is a real merge that starts with #. The blank line stays two newlines.
         ("markdown-heading", "## Title\n\nSome text"),
+        ("progress-sentence", PROGRESS),
     ]
+    want_count("gpt2-match", enc.encode(PROGRESS), 6)
     cases = []
     for name, text in samples:
         expected = enc.encode(text)
