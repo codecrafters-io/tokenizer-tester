@@ -122,3 +122,27 @@ func piecesSuffix(expected, actual any) string {
 	}
 	return suffix
 }
+
+// gpt2OneIDPerByte is what a program prints when it looks every byte up in
+// vocab.json and never merges: the id of each byte's own token, in order.
+func gpt2OneIDPerByte(text string) ([]any, bool) {
+	tokens, err := loadGPT2Tokens()
+	if err != nil || text == "" {
+		return nil, false
+	}
+	idOf := make(map[byte]int, 256)
+	for id, piece := range tokens {
+		if len(piece) == 1 {
+			idOf[piece[0]] = id
+		}
+	}
+	ids := make([]any, len(text))
+	for i, b := range []byte(text) {
+		id, ok := idOf[b]
+		if !ok {
+			return nil, false
+		}
+		ids[i] = json.Number(strconv.Itoa(id))
+	}
+	return ids, true
+}

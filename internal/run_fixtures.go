@@ -111,7 +111,11 @@ func runFixtureCase(harness *test_case_harness.TestCaseHarness, slug string, tes
 		return fmt.Errorf("%s: %s%s", testCase.Name, message, chunksSuffix(testCase))
 	}
 	if result.ExitCode != 0 && len(bytes.TrimSpace(result.Stdout)) == 0 {
-		return fmt.Errorf("%s: your program exited with code %d and printed nothing to stdout%s", testCase.Name, result.ExitCode, chunksSuffix(testCase))
+		crash := ""
+		if slug == "gpt2-match" {
+			crash = ". If a lookup in vocab.json failed, check your byte-to-character table: a space is stored as Ġ and a newline as Ċ"
+		}
+		return fmt.Errorf("%s: your program exited with code %d and printed nothing to stdout%s%s", testCase.Name, result.ExitCode, crash, chunksSuffix(testCase))
 	}
 
 	actual, err := parseJSONValue(result.Stdout)
@@ -253,8 +257,15 @@ func hint(slug string, testCase fixtureCase, actual any) string {
 			return ". The output matches the input bytes, so nothing got merged"
 		}
 	case "gpt2-match":
+		text := testCase.Files["text.txt"]
 		if containsNull(actual) {
 			return ". A null id means a piece isn't in vocab.json, which usually means the byte-to-character table is off"
+		}
+		if sameUTF8Bytes(text, actual) {
+			return ". These are the text's byte values. In this stage every id comes from vocab.json, where a space is 220 and `a` is 64"
+		}
+		if unmerged, ok := gpt2OneIDPerByte(text); ok && len(unmerged) > 1 && reflect.DeepEqual(unmerged, actual) {
+			return ". You printed one id per byte, so the table and vocab.json lookup work and no merges were applied. Check how you read merges.txt"
 		}
 	}
 	return ""
