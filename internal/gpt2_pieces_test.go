@@ -53,3 +53,36 @@ func TestPiecesSuffixShowsBothSides(t *testing.T) {
 		t.Fatalf("suffix: %s", suffix)
 	}
 }
+
+// The ids are GPT-2's single-byte tokens as tiktoken reports them: a is 64,
+// ! is 0, a space is 220, and a newline is 198.
+func TestGPT2OneIDPerByte(t *testing.T) {
+	got, ok := gpt2OneIDPerByte("a! \n")
+	want, _ := parseJSONValue([]byte("[64, 0, 220, 198]"))
+	if !ok || !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %v (ok=%v), want %v", got, ok, want)
+	}
+}
+
+func TestGPT2MatchHintsTellFailuresApart(t *testing.T) {
+	testCase := fixtureCase{Files: map[string]string{"text.txt": "a! \n"}}
+	cases := []struct {
+		actual string
+		want   string
+	}{
+		{"[97, 33, 32, 10]", "byte values"},
+		{"[64, 0, 220, 198]", "one id per byte"},
+		{"[64, null]", "null id"},
+		{"[64, 0, 220]", ""},
+	}
+	for _, c := range cases {
+		actual, err := parseJSONValue([]byte(c.actual))
+		if err != nil {
+			t.Fatal(err)
+		}
+		got := hint("gpt2-match", testCase, actual)
+		if (c.want == "" && got != "") || !strings.Contains(got, c.want) {
+			t.Errorf("%s: hint %q, want it to contain %q", c.actual, got, c.want)
+		}
+	}
+}
